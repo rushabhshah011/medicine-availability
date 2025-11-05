@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="description" content="Find which pharmacy apps have your medicine in stock - like Skyscanner but for medicines">
+    <meta name="theme-color" content="#4F46E5">
+    <title>MedFinder - Find Your Medicine</title>
+
+    <!-- PWA Support -->
+    <link rel="manifest" href="manifest.json">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="default">
+    <meta name="apple-mobile-web-app-title" content="MedFinder">
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header class="header">
+            <div class="logo">
+                <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="12" y="4" width="8" height="24" rx="2" fill="#4F46E5"/>
+                    <rect x="4" y="12" width="24" height="8" rx="2" fill="#4F46E5"/>
+                </svg>
+                <h1>MedFinder</h1>
+            </div>
+            <p class="tagline">Find your medicine across pharmacy apps</p>
+        </header>
+
+        <!-- Search Section -->
+        <div class="search-section">
+            <div class="search-box">
+                <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                <input
+                    type="text"
+                    id="medicineSearch"
+                    placeholder="Search for a medicine (e.g., Aspirin, Ibuprofen)"
+                    autocomplete="off"
+                    autofocus
+                >
+                <button id="clearBtn" class="clear-btn" aria-label="Clear search">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Search Suggestions -->
+            <div id="suggestions" class="suggestions"></div>
+        </div>
+
+        <!-- Results Section -->
+        <div id="resultsSection" class="results-section hidden">
+            <div class="results-header">
+                <h2 id="resultsTitle">Available at <span id="resultsCount"></span> pharmacies</h2>
+                <p class="results-subtitle">Tap to open in app or web</p>
+            </div>
+            <div id="pharmacyList" class="pharmacy-list"></div>
+        </div>
+
+        <!-- Empty State -->
+        <div id="emptyState" class="empty-state">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="24" y="8" width="16" height="48" rx="4" fill="#E5E7EB"/>
+                <rect x="8" y="24" width="48" height="16" rx="4" fill="#E5E7EB"/>
+            </svg>
+            <h3>Search for a medicine</h3>
+            <p>Type the name of any medicine to see which pharmacy apps have it available</p>
+
+            <!-- Popular Searches -->
+            <div class="popular-searches">
+                <p class="popular-label">Popular searches:</p>
+                <div class="popular-chips">
+                    <button class="chip" data-medicine="Aspirin">Aspirin</button>
+                    <button class="chip" data-medicine="Ibuprofen">Ibuprofen</button>
+                    <button class="chip" data-medicine="Amoxicillin">Amoxicillin</button>
+                    <button class="chip" data-medicine="Lisinopril">Lisinopril</button>
+                    <button class="chip" data-medicine="Metformin">Metformin</button>
+                    <button class="chip" data-medicine="Atorvastatin">Atorvastatin</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- No Results State -->
+        <div id="noResults" class="no-results hidden">
+            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="28" cy="28" r="12" stroke="#E5E7EB" stroke-width="4"/>
+                <path d="M38 38L48 48" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
+            </svg>
+            <h3>No results found</h3>
+            <p id="noResultsText">Try searching for a different medicine</p>
+        </div>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <p>⚠️ This is a demo app. Always consult your healthcare provider.</p>
+        </footer>
+    </div>
+
+    <script src="data.js"></script>
+    <script src="app.js"></script>
+</body>
+</html>

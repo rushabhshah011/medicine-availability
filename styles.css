@@ -1,0 +1,432 @@
+/* Reset and Base Styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary: #4F46E5;
+    --primary-dark: #4338CA;
+    --primary-light: #6366F1;
+    --bg: #F9FAFB;
+    --surface: #FFFFFF;
+    --text-primary: #111827;
+    --text-secondary: #6B7280;
+    --border: #E5E7EB;
+    --success: #10B981;
+    --warning: #F59E0B;
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text-primary);
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 640px;
+    margin: 0 auto;
+    padding: 0;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+/* Header */
+.header {
+    background: var(--surface);
+    padding: 1.5rem 1rem;
+    text-align: center;
+    border-bottom: 1px solid var(--border);
+    box-shadow: var(--shadow-sm);
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.75rem;
+    margin-bottom: 0.5rem;
+}
+
+.logo h1 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--primary);
+}
+
+.tagline {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Search Section */
+.search-section {
+    background: var(--surface);
+    padding: 1rem;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    border-bottom: 1px solid var(--border);
+}
+
+.search-box {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.search-icon {
+    position: absolute;
+    left: 1rem;
+    color: var(--text-secondary);
+    pointer-events: none;
+}
+
+#medicineSearch {
+    width: 100%;
+    padding: 0.875rem 3rem;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    font-size: 1rem;
+    transition: all 0.2s;
+    background: var(--bg);
+}
+
+#medicineSearch:focus {
+    outline: none;
+    border-color: var(--primary);
+    background: var(--surface);
+    box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+}
+
+.clear-btn {
+    position: absolute;
+    right: 0.5rem;
+    background: transparent;
+    border: none;
+    padding: 0.5rem;
+    cursor: pointer;
+    color: var(--text-secondary);
+    display: none;
+    transition: color 0.2s;
+}
+
+.clear-btn.visible {
+    display: block;
+}
+
+.clear-btn:hover {
+    color: var(--text-primary);
+}
+
+/* Suggestions */
+.suggestions {
+    margin-top: 0.5rem;
+    max-height: 200px;
+    overflow-y: auto;
+    background: var(--surface);
+    border-radius: 8px;
+    display: none;
+}
+
+.suggestions.visible {
+    display: block;
+}
+
+.suggestion-item {
+    padding: 0.75rem 1rem;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.15s;
+}
+
+.suggestion-item:last-child {
+    border-bottom: none;
+}
+
+.suggestion-item:hover {
+    background: var(--bg);
+}
+
+.suggestion-item strong {
+    color: var(--primary);
+}
+
+/* Results Section */
+.results-section {
+    flex: 1;
+    padding: 1rem;
+}
+
+.results-header {
+    margin-bottom: 1rem;
+}
+
+.results-header h2 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.results-header h2 span {
+    color: var(--primary);
+}
+
+.results-subtitle {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+/* Pharmacy List */
+.pharmacy-list {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+
+.pharmacy-card {
+    background: var(--surface);
+    border-radius: 12px;
+    padding: 1rem;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.2s;
+    text-decoration: none;
+    color: inherit;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+}
+
+.pharmacy-card:active {
+    transform: scale(0.98);
+    box-shadow: var(--shadow-md);
+}
+
+.pharmacy-icon {
+    width: 48px;
+    height: 48px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.5rem;
+    flex-shrink: 0;
+}
+
+.pharmacy-info {
+    flex: 1;
+}
+
+.pharmacy-name {
+    font-weight: 600;
+    font-size: 1rem;
+    margin-bottom: 0.25rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.availability {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.25rem;
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 999px;
+    font-weight: 500;
+}
+
+.availability.in-stock {
+    background: #D1FAE5;
+    color: #065F46;
+}
+
+.availability.limited {
+    background: #FEF3C7;
+    color: #92400E;
+}
+
+.pharmacy-details {
+    font-size: 0.875rem;
+    color: var(--text-secondary);
+}
+
+.pharmacy-arrow {
+    color: var(--text-secondary);
+    flex-shrink: 0;
+}
+
+/* Empty State */
+.empty-state {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.empty-state svg {
+    margin-bottom: 1.5rem;
+}
+
+.empty-state h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.empty-state p {
+    color: var(--text-secondary);
+    max-width: 320px;
+}
+
+.popular-searches {
+    margin-top: 2rem;
+}
+
+.popular-label {
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--text-secondary);
+    margin-bottom: 0.75rem;
+}
+
+.popular-chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    justify-content: center;
+}
+
+.chip {
+    padding: 0.5rem 1rem;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 999px;
+    font-size: 0.875rem;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.chip:hover {
+    background: var(--primary);
+    color: white;
+    border-color: var(--primary);
+}
+
+.chip:active {
+    transform: scale(0.95);
+}
+
+/* No Results */
+.no-results {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+}
+
+.no-results svg {
+    margin-bottom: 1.5rem;
+}
+
+.no-results h3 {
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 0.5rem;
+}
+
+.no-results p {
+    color: var(--text-secondary);
+}
+
+/* Footer */
+.footer {
+    padding: 1.5rem 1rem;
+    text-align: center;
+    background: var(--surface);
+    border-top: 1px solid var(--border);
+    margin-top: auto;
+}
+
+.footer p {
+    font-size: 0.75rem;
+    color: var(--text-secondary);
+}
+
+/* Utility Classes */
+.hidden {
+    display: none !important;
+}
+
+/* Loading Animation */
+@keyframes pulse {
+    0%, 100% {
+        opacity: 1;
+    }
+    50% {
+        opacity: 0.5;
+    }
+}
+
+.loading {
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+/* Responsive */
+@media (min-width: 640px) {
+    .header {
+        padding: 2rem;
+    }
+
+    .search-section {
+        padding: 1.5rem;
+    }
+
+    .results-section {
+        padding: 1.5rem;
+    }
+
+    .pharmacy-card {
+        padding: 1.25rem;
+    }
+}
+
+/* Touch Optimization */
+@media (hover: none) and (pointer: coarse) {
+    .pharmacy-card:hover {
+        background: var(--surface);
+    }
+
+    .pharmacy-card:active {
+        background: var(--bg);
+    }
+}
+
+/* Dark Mode Support (optional) */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #111827;
+        --surface: #1F2937;
+        --text-primary: #F9FAFB;
+        --text-secondary: #9CA3AF;
+        --border: #374151;
+    }
+}

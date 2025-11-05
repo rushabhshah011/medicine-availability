@@ -1,0 +1,32 @@
+{
+  "name": "MedFinder - Medicine Pharmacy Finder",
+  "short_name": "MedFinder",
+  "description": "Find which pharmacy apps have your medicine in stock - like Skyscanner but for medicines",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#F9FAFB",
+  "theme_color": "#4F46E5",
+  "orientation": "portrait-primary",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect x='72' y='24' width='48' height='144' rx='8' fill='%234F46E5'/><rect x='24' y='72' width='144' height='48' rx='8' fill='%234F46E5'/></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect x='192' y='64' width='128' height='384' rx='16' fill='%234F46E5'/><rect x='64' y='192' width='384' height='128' rx='16' fill='%234F46E5'/></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["health", "medical", "utilities"],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%23F9FAFB' width='540' height='720'/><text x='270' y='360' text-anchor='middle' fill='%234F46E5' font-size='24' font-family='sans-serif'>MedFinder</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml"
+    }
+  ]
+}
