@@ -3,15 +3,15 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <meta name="description" content="Find which pharmacy apps have your medicine in stock - like Skyscanner but for medicines">
-    <meta name="theme-color" content="#4F46E5">
-    <title>MedFinder - Find Your Medicine</title>
+    <meta name="description" content="Find which pharmacy apps have your medicine in stock across India - like Skyscanner but for medicines">
+    <meta name="theme-color" content="#10847E">
+    <title>MedFinder India - Find Your Medicine</title>
 
     <!-- PWA Support -->
     <link rel="manifest" href="manifest.json">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="MedFinder">
+    <meta name="apple-mobile-web-app-title" content="MedFinder India">
 
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -21,66 +21,158 @@
         <header class="header">
             <div class="logo">
                 <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <rect x="12" y="4" width="8" height="24" rx="2" fill="#4F46E5"/>
-                    <rect x="4" y="12" width="24" height="8" rx="2" fill="#4F46E5"/>
+                    <rect x="12" y="4" width="8" height="24" rx="2" fill="#10847E"/>
+                    <rect x="4" y="12" width="24" height="8" rx="2" fill="#10847E"/>
                 </svg>
-                <h1>MedFinder</h1>
+                <h1>MedFinder 🇮🇳</h1>
             </div>
-            <p class="tagline">Find your medicine across pharmacy apps</p>
+            <p class="tagline">Compare medicine prices across pharmacy apps in India</p>
         </header>
 
         <!-- Search Section -->
         <div class="search-section">
-            <div class="search-box">
-                <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                <input
-                    type="text"
-                    id="medicineSearch"
-                    placeholder="Search for a medicine (e.g., Aspirin, Ibuprofen)"
-                    autocomplete="off"
-                    autofocus
-                >
-                <button id="clearBtn" class="clear-btn" aria-label="Clear search">
-                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+            <div class="input-group">
+                <!-- Pincode Input -->
+                <div class="input-wrapper">
+                    <label for="pincodeInput" class="input-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2"/>
+                            <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Pincode
+                    </label>
+                    <input
+                        type="tel"
+                        id="pincodeInput"
+                        placeholder="Enter 6-digit pincode"
+                        maxlength="6"
+                        pattern="[0-9]{6}"
+                        inputmode="numeric"
+                        autocomplete="postal-code"
+                    >
+                    <div id="pincodeError" class="input-error hidden">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                            <path d="M12 8v4M12 16h.01" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                        </svg>
+                        <span id="pincodeErrorText">Please enter a valid 6-digit pincode</span>
+                    </div>
+                    <div id="pincodeInfo" class="pincode-info hidden">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            <polyline points="22 4 12 14.01 9 11.01" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <span id="pincodeInfoText"></span>
+                    </div>
+                </div>
+
+                <!-- Medicine Search -->
+                <div class="input-wrapper">
+                    <label for="medicineSearch" class="input-label">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <rect x="9" y="2" width="6" height="20" rx="2" stroke="currentColor" stroke-width="2"/>
+                            <rect x="2" y="9" width="20" height="6" rx="2" stroke="currentColor" stroke-width="2"/>
+                        </svg>
+                        Medicine Name
+                    </label>
+                    <div class="search-box">
+                        <svg class="search-icon" width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M9 17A8 8 0 1 0 9 1a8 8 0 0 0 0 16zM19 19l-4.35-4.35" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                        <input
+                            type="text"
+                            id="medicineSearch"
+                            placeholder="e.g., Dolo 650, Crocin, Paracetamol"
+                            autocomplete="off"
+                        >
+                        <button id="clearBtn" class="clear-btn" aria-label="Clear search">
+                            <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M15 5L5 15M5 5l10 10" stroke="currentColor" stroke-width="2" stroke-linecap="round"/>
+                            </svg>
+                        </button>
+                    </div>
+
+                    <!-- Search Suggestions -->
+                    <div id="suggestions" class="suggestions"></div>
+                </div>
+
+                <!-- Search Button -->
+                <button id="searchBtn" class="search-btn" disabled>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-width="2"/>
+                        <path d="M12 16l4-4-4-4M8 12h8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
                     </svg>
+                    Find Medicine
                 </button>
             </div>
-
-            <!-- Search Suggestions -->
-            <div id="suggestions" class="suggestions"></div>
         </div>
 
         <!-- Results Section -->
         <div id="resultsSection" class="results-section hidden">
             <div class="results-header">
-                <h2 id="resultsTitle">Available at <span id="resultsCount"></span> pharmacies</h2>
-                <p class="results-subtitle">Tap to open in app or web</p>
+                <h2 id="resultsTitle">
+                    <span class="results-medicine"></span> available at <span id="resultsCount" class="highlight"></span> pharmacies
+                </h2>
+                <p class="results-location">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z" stroke="currentColor" stroke-width="2"/>
+                        <circle cx="12" cy="10" r="3" stroke="currentColor" stroke-width="2"/>
+                    </svg>
+                    <span id="resultsLocationText"></span>
+                </p>
+                <p class="results-subtitle">Tap on any pharmacy to order online</p>
             </div>
             <div id="pharmacyList" class="pharmacy-list"></div>
         </div>
 
         <!-- Empty State -->
         <div id="emptyState" class="empty-state">
-            <svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <rect x="24" y="8" width="16" height="48" rx="4" fill="#E5E7EB"/>
-                <rect x="8" y="24" width="48" height="16" rx="4" fill="#E5E7EB"/>
-            </svg>
-            <h3>Search for a medicine</h3>
-            <p>Type the name of any medicine to see which pharmacy apps have it available</p>
+            <div class="empty-icon">
+                <svg width="80" height="80" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <rect x="24" y="8" width="16" height="48" rx="4" fill="#D1FAE5"/>
+                    <rect x="8" y="24" width="48" height="16" rx="4" fill="#10847E"/>
+                </svg>
+            </div>
+            <h3>Welcome to MedFinder! 🇮🇳</h3>
+            <p class="empty-description">Find the best prices for your medicines across top pharmacy apps in India</p>
+
+            <div class="how-it-works">
+                <h4>How it works:</h4>
+                <div class="steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Enter Pincode</strong>
+                            <span>Your 6-digit area pincode</span>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Search Medicine</strong>
+                            <span>Type the medicine name</span>
+                        </div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Compare & Buy</strong>
+                            <span>See prices and order online</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
             <!-- Popular Searches -->
             <div class="popular-searches">
-                <p class="popular-label">Popular searches:</p>
+                <p class="popular-label">Try popular medicines:</p>
                 <div class="popular-chips">
-                    <button class="chip" data-medicine="Aspirin">Aspirin</button>
-                    <button class="chip" data-medicine="Ibuprofen">Ibuprofen</button>
-                    <button class="chip" data-medicine="Amoxicillin">Amoxicillin</button>
-                    <button class="chip" data-medicine="Lisinopril">Lisinopril</button>
+                    <button class="chip" data-medicine="Dolo 650">Dolo 650</button>
+                    <button class="chip" data-medicine="Crocin">Crocin</button>
+                    <button class="chip" data-medicine="Azithromycin">Azithromycin</button>
                     <button class="chip" data-medicine="Metformin">Metformin</button>
-                    <button class="chip" data-medicine="Atorvastatin">Atorvastatin</button>
+                    <button class="chip" data-medicine="Pantoprazole">Pantoprazole</button>
+                    <button class="chip" data-medicine="Cetirizine">Cetirizine</button>
                 </div>
             </div>
         </div>
@@ -92,12 +184,21 @@
                 <path d="M38 38L48 48" stroke="#E5E7EB" stroke-width="4" stroke-linecap="round"/>
             </svg>
             <h3>No results found</h3>
-            <p id="noResultsText">Try searching for a different medicine</p>
+            <p id="noResultsText">Try searching for a different medicine name</p>
+            <button id="tryAgainBtn" class="try-again-btn">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M21 3v5h-5M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="M8 16H3v5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                Try Again
+            </button>
         </div>
 
         <!-- Footer -->
         <footer class="footer">
-            <p>⚠️ This is a demo app. Always consult your healthcare provider.</p>
+            <p>🩺 This is a demo app. Always consult your healthcare provider before taking medicines.</p>
+            <p class="footer-note">Prices and availability are for demonstration purposes only.</p>
         </footer>
     </div>
 

@@ -1,195 +1,257 @@
-// Mock database of medicines and pharmacy availability
+// Mock database of medicines and pharmacy availability - India specific
 
 const PHARMACY_APPS = {
-    cvs: {
-        name: 'CVS Pharmacy',
-        icon: '🏪',
-        color: '#CC0000',
-        appScheme: 'cvs://',
-        webUrl: 'https://www.cvs.com',
-        getDeepLink: (medicine) => `cvs://pharmacy/search?q=${encodeURIComponent(medicine)}`,
-        getWebLink: (medicine) => `https://www.cvs.com/shop/pharmacy?searchTerm=${encodeURIComponent(medicine)}`
-    },
-    walgreens: {
-        name: 'Walgreens',
+    pharmeasy: {
+        name: 'PharmEasy',
         icon: '💊',
-        color: '#E31837',
-        appScheme: 'walgreens://',
-        webUrl: 'https://www.walgreens.com',
-        getDeepLink: (medicine) => `walgreens://search?query=${encodeURIComponent(medicine)}`,
-        getWebLink: (medicine) => `https://www.walgreens.com/search/results.jsp?Ntt=${encodeURIComponent(medicine)}`
+        color: '#10847E',
+        appScheme: 'pharmeasy://',
+        webUrl: 'https://pharmeasy.in',
+        getDeepLink: (medicine, pincode) => `pharmeasy://medicines/search?name=${encodeURIComponent(medicine)}&pincode=${pincode}`,
+        getWebLink: (medicine, pincode) => `https://pharmeasy.in/search/all?name=${encodeURIComponent(medicine)}`
     },
-    riteaid: {
-        name: 'Rite Aid',
+    onemg: {
+        name: '1mg',
         icon: '🏥',
-        color: '#0066B2',
-        appScheme: 'riteaid://',
-        webUrl: 'https://www.riteaid.com',
-        getDeepLink: (medicine) => `riteaid://pharmacy/search?q=${encodeURIComponent(medicine)}`,
-        getWebLink: (medicine) => `https://www.riteaid.com/shop/catalogsearch/result/?q=${encodeURIComponent(medicine)}`
+        color: '#FF6F61',
+        appScheme: 'onemg://',
+        webUrl: 'https://www.1mg.com',
+        getDeepLink: (medicine, pincode) => `onemg://search?q=${encodeURIComponent(medicine)}&pincode=${pincode}`,
+        getWebLink: (medicine, pincode) => `https://www.1mg.com/search/all?name=${encodeURIComponent(medicine)}`
     },
-    walmart: {
-        name: 'Walmart Pharmacy',
-        icon: '🛒',
-        color: '#0071CE',
-        appScheme: 'walmart://',
-        webUrl: 'https://www.walmart.com',
-        getDeepLink: (medicine) => `walmart://pharmacy/search?query=${encodeURIComponent(medicine)}`,
-        getWebLink: (medicine) => `https://www.walmart.com/search?q=${encodeURIComponent(medicine)}+pharmacy`
+    apollo: {
+        name: 'Apollo Pharmacy',
+        icon: '🏪',
+        color: '#00B38E',
+        appScheme: 'apollo247://',
+        webUrl: 'https://www.apollopharmacy.in',
+        getDeepLink: (medicine, pincode) => `apollo247://pharmacy/search?query=${encodeURIComponent(medicine)}&pincode=${pincode}`,
+        getWebLink: (medicine, pincode) => `https://www.apollopharmacy.in/search-medicines/${encodeURIComponent(medicine)}`
     },
-    amazon: {
-        name: 'Amazon Pharmacy',
-        icon: '📦',
-        color: '#FF9900',
-        appScheme: 'amazon://',
-        webUrl: 'https://pharmacy.amazon.com',
-        getDeepLink: (medicine) => `amazon://pharmacy/search?keywords=${encodeURIComponent(medicine)}`,
-        getWebLink: (medicine) => `https://pharmacy.amazon.com/search?keywords=${encodeURIComponent(medicine)}`
+    netmeds: {
+        name: 'Netmeds',
+        icon: '🩺',
+        color: '#1C8C8C',
+        appScheme: 'netmeds://',
+        webUrl: 'https://www.netmeds.com',
+        getDeepLink: (medicine, pincode) => `netmeds://search?q=${encodeURIComponent(medicine)}&pincode=${pincode}`,
+        getWebLink: (medicine, pincode) => `https://www.netmeds.com/catalogsearch/result/${encodeURIComponent(medicine)}/all`
     },
-    goodrx: {
-        name: 'GoodRx',
-        icon: '💰',
-        color: '#FFA500',
-        appScheme: 'goodrx://',
-        webUrl: 'https://www.goodrx.com',
-        getDeepLink: (medicine) => `goodrx://drug/${encodeURIComponent(medicine.toLowerCase())}`,
-        getWebLink: (medicine) => `https://www.goodrx.com/${encodeURIComponent(medicine.toLowerCase())}`
+    medlife: {
+        name: 'Medlife',
+        icon: '⚕️',
+        color: '#E91E63',
+        appScheme: 'medlife://',
+        webUrl: 'https://www.medlife.com',
+        getDeepLink: (medicine, pincode) => `medlife://search?keyword=${encodeURIComponent(medicine)}&pincode=${pincode}`,
+        getWebLink: (medicine, pincode) => `https://www.medlife.com/search?keyword=${encodeURIComponent(medicine)}`
+    },
+    tata1mg: {
+        name: 'Tata 1mg',
+        icon: '💙',
+        color: '#1A7FA0',
+        appScheme: 'tata1mg://',
+        webUrl: 'https://www.1mg.com',
+        getDeepLink: (medicine, pincode) => `tata1mg://search?query=${encodeURIComponent(medicine)}&pincode=${pincode}`,
+        getWebLink: (medicine, pincode) => `https://www.1mg.com/search/all?name=${encodeURIComponent(medicine)}`
     }
 };
 
-// Mock medicine database with availability and pricing info
+// Mock medicine database with availability and pricing info (in Indian Rupees)
 const MEDICINES_DB = {
-    'aspirin': {
-        name: 'Aspirin',
-        genericName: 'Acetylsalicylic Acid',
-        category: 'Pain Relief',
+    'dolo 650': {
+        name: 'Dolo 650',
+        genericName: 'Paracetamol',
+        category: 'Pain Relief / Fever',
+        manufacturer: 'Micro Labs',
         availability: {
-            cvs: { inStock: true, price: '$8.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$9.49', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$8.49', delivery: '1-2 days' },
-            walmart: { inStock: true, price: '$6.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$7.99', delivery: '2 days' },
-            goodrx: { inStock: true, price: 'From $5.50', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹28', delivery: 'Today', discount: '15% off' },
+            onemg: { inStock: true, price: '₹30', delivery: 'Today', discount: '10% off' },
+            apollo: { inStock: true, price: '₹32', delivery: 'Today', discount: '5% off' },
+            netmeds: { inStock: true, price: '₹29', delivery: 'Today', discount: '12% off' },
+            medlife: { inStock: true, price: '₹31', delivery: 'Tomorrow', discount: '8% off' },
+            tata1mg: { inStock: true, price: '₹30', delivery: 'Today', discount: '10% off' }
         }
     },
-    'ibuprofen': {
-        name: 'Ibuprofen',
-        genericName: 'Ibuprofen',
-        category: 'Pain Relief / Anti-inflammatory',
+    'crocin': {
+        name: 'Crocin',
+        genericName: 'Paracetamol',
+        category: 'Pain Relief / Fever',
+        manufacturer: 'GSK',
         availability: {
-            cvs: { inStock: true, price: '$10.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$11.49', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$9.99', delivery: 'Same day' },
-            walmart: { inStock: true, price: '$8.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$9.49', delivery: '1 day' },
-            goodrx: { inStock: true, price: 'From $6.75', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹24', delivery: 'Today', discount: '20% off' },
+            onemg: { inStock: true, price: '₹26', delivery: 'Today', discount: '15% off' },
+            apollo: { inStock: true, price: '₹25', delivery: 'Today', discount: '18% off' },
+            netmeds: { inStock: true, price: '₹23', delivery: 'Today', discount: '22% off' },
+            medlife: { inStock: true, price: '₹27', delivery: 'Today', discount: '12% off' },
+            tata1mg: { inStock: true, price: '₹26', delivery: 'Today', discount: '15% off' }
         }
     },
-    'amoxicillin': {
-        name: 'Amoxicillin',
-        genericName: 'Amoxicillin',
+    'azithromycin': {
+        name: 'Azithromycin 500mg',
+        genericName: 'Azithromycin',
         category: 'Antibiotic',
+        manufacturer: 'Various',
         availability: {
-            cvs: { inStock: true, price: '$15.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$16.99', delivery: 'Same day' },
-            riteaid: { inStock: false, price: 'Out of stock', delivery: 'N/A' },
-            walmart: { inStock: true, price: '$13.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$14.49', delivery: '1-2 days' },
-            goodrx: { inStock: true, price: 'From $8.50', delivery: 'Compare prices' }
-        }
-    },
-    'lisinopril': {
-        name: 'Lisinopril',
-        genericName: 'Lisinopril',
-        category: 'Blood Pressure',
-        availability: {
-            cvs: { inStock: true, price: '$12.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$13.49', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$11.99', delivery: '1 day' },
-            walmart: { inStock: true, price: '$9.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$10.99', delivery: '2 days' },
-            goodrx: { inStock: true, price: 'From $4.00', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹95', delivery: 'Today', discount: '10% off' },
+            onemg: { inStock: true, price: '₹98', delivery: 'Tomorrow', discount: '8% off' },
+            apollo: { inStock: true, price: '₹92', delivery: 'Today', discount: '12% off' },
+            netmeds: { inStock: false, price: 'Out of stock', delivery: 'N/A', discount: '' },
+            medlife: { inStock: true, price: '₹96', delivery: 'Today', discount: '9% off' },
+            tata1mg: { inStock: true, price: '₹98', delivery: 'Tomorrow', discount: '8% off' }
         }
     },
     'metformin': {
-        name: 'Metformin',
+        name: 'Metformin 500mg',
         genericName: 'Metformin HCl',
         category: 'Diabetes',
+        manufacturer: 'Various',
         availability: {
-            cvs: { inStock: true, price: '$14.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$15.99', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$13.99', delivery: 'Same day' },
-            walmart: { inStock: true, price: '$11.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$12.99', delivery: '1 day' },
-            goodrx: { inStock: true, price: 'From $4.50', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹45', delivery: 'Today', discount: '25% off' },
+            onemg: { inStock: true, price: '₹48', delivery: 'Today', discount: '20% off' },
+            apollo: { inStock: true, price: '₹42', delivery: 'Today', discount: '28% off' },
+            netmeds: { inStock: true, price: '₹44', delivery: 'Today', discount: '26% off' },
+            medlife: { inStock: true, price: '₹46', delivery: 'Tomorrow', discount: '23% off' },
+            tata1mg: { inStock: true, price: '₹48', delivery: 'Today', discount: '20% off' }
         }
     },
-    'atorvastatin': {
-        name: 'Atorvastatin',
-        genericName: 'Atorvastatin Calcium',
-        category: 'Cholesterol',
+    'pantoprazole': {
+        name: 'Pantoprazole 40mg',
+        genericName: 'Pantoprazole',
+        category: 'Acidity / GERD',
+        manufacturer: 'Various',
         availability: {
-            cvs: { inStock: true, price: '$18.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$19.99', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$17.99', delivery: '1 day' },
-            walmart: { inStock: true, price: '$15.99', delivery: 'Same day' },
-            amazon: { inStock: false, price: 'Out of stock', delivery: 'N/A' },
-            goodrx: { inStock: true, price: 'From $7.00', delivery: 'Compare prices' }
-        }
-    },
-    'omeprazole': {
-        name: 'Omeprazole',
-        genericName: 'Omeprazole',
-        category: 'Acid Reflux',
-        availability: {
-            cvs: { inStock: true, price: '$16.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$17.49', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$15.99', delivery: 'Same day' },
-            walmart: { inStock: true, price: '$13.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$14.99', delivery: '2 days' },
-            goodrx: { inStock: true, price: 'From $9.00', delivery: 'Compare prices' }
-        }
-    },
-    'levothyroxine': {
-        name: 'Levothyroxine',
-        genericName: 'Levothyroxine Sodium',
-        category: 'Thyroid',
-        availability: {
-            cvs: { inStock: true, price: '$13.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$14.99', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$12.99', delivery: '1 day' },
-            walmart: { inStock: true, price: '$10.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$11.99', delivery: '1-2 days' },
-            goodrx: { inStock: true, price: 'From $4.00', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹68', delivery: 'Today', discount: '18% off' },
+            onemg: { inStock: true, price: '₹72', delivery: 'Today', discount: '15% off' },
+            apollo: { inStock: true, price: '₹65', delivery: 'Today', discount: '22% off' },
+            netmeds: { inStock: true, price: '₹70', delivery: 'Today', discount: '17% off' },
+            medlife: { inStock: true, price: '₹69', delivery: 'Today', discount: '19% off' },
+            tata1mg: { inStock: true, price: '₹72', delivery: 'Tomorrow', discount: '15% off' }
         }
     },
     'amlodipine': {
-        name: 'Amlodipine',
+        name: 'Amlodipine 5mg',
         genericName: 'Amlodipine Besylate',
         category: 'Blood Pressure',
+        manufacturer: 'Various',
         availability: {
-            cvs: { inStock: true, price: '$11.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$12.99', delivery: 'Same day' },
-            riteaid: { inStock: false, price: 'Out of stock', delivery: 'N/A' },
-            walmart: { inStock: true, price: '$9.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$10.49', delivery: '2 days' },
-            goodrx: { inStock: true, price: 'From $4.00', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹52', delivery: 'Today', discount: '30% off' },
+            onemg: { inStock: true, price: '₹55', delivery: 'Today', discount: '28% off' },
+            apollo: { inStock: true, price: '₹50', delivery: 'Today', discount: '32% off' },
+            netmeds: { inStock: true, price: '₹53', delivery: 'Today', discount: '29% off' },
+            medlife: { inStock: false, price: 'Out of stock', delivery: 'N/A', discount: '' },
+            tata1mg: { inStock: true, price: '₹55', delivery: 'Today', discount: '28% off' }
         }
     },
-    'albuterol': {
-        name: 'Albuterol',
-        genericName: 'Albuterol Sulfate',
-        category: 'Asthma / Respiratory',
+    'atorvastatin': {
+        name: 'Atorvastatin 10mg',
+        genericName: 'Atorvastatin',
+        category: 'Cholesterol',
+        manufacturer: 'Various',
         availability: {
-            cvs: { inStock: true, price: '$24.99', delivery: 'Same day' },
-            walgreens: { inStock: true, price: '$26.99', delivery: 'Same day' },
-            riteaid: { inStock: true, price: '$23.99', delivery: 'Same day' },
-            walmart: { inStock: true, price: '$21.99', delivery: 'Same day' },
-            amazon: { inStock: true, price: '$22.99', delivery: '1 day' },
-            goodrx: { inStock: true, price: 'From $15.00', delivery: 'Compare prices' }
+            pharmeasy: { inStock: true, price: '₹85', delivery: 'Today', discount: '22% off' },
+            onemg: { inStock: true, price: '₹88', delivery: 'Today', discount: '20% off' },
+            apollo: { inStock: true, price: '₹82', delivery: 'Today', discount: '25% off' },
+            netmeds: { inStock: true, price: '₹86', delivery: 'Tomorrow', discount: '21% off' },
+            medlife: { inStock: true, price: '₹87', delivery: 'Today', discount: '20% off' },
+            tata1mg: { inStock: true, price: '₹88', delivery: 'Today', discount: '20% off' }
+        }
+    },
+    'cetirizine': {
+        name: 'Cetirizine 10mg',
+        genericName: 'Cetirizine',
+        category: 'Allergy',
+        manufacturer: 'Various',
+        availability: {
+            pharmeasy: { inStock: true, price: '₹18', delivery: 'Today', discount: '35% off' },
+            onemg: { inStock: true, price: '₹20', delivery: 'Today', discount: '30% off' },
+            apollo: { inStock: true, price: '₹17', delivery: 'Today', discount: '38% off' },
+            netmeds: { inStock: true, price: '₹19', delivery: 'Today', discount: '33% off' },
+            medlife: { inStock: true, price: '₹21', delivery: 'Today', discount: '28% off' },
+            tata1mg: { inStock: true, price: '₹20', delivery: 'Today', discount: '30% off' }
+        }
+    },
+    'montelukast': {
+        name: 'Montelukast 10mg',
+        genericName: 'Montelukast',
+        category: 'Asthma / Allergy',
+        manufacturer: 'Various',
+        availability: {
+            pharmeasy: { inStock: true, price: '₹125', delivery: 'Today', discount: '15% off' },
+            onemg: { inStock: true, price: '₹130', delivery: 'Today', discount: '12% off' },
+            apollo: { inStock: true, price: '₹122', delivery: 'Today', discount: '18% off' },
+            netmeds: { inStock: true, price: '₹128', delivery: 'Tomorrow', discount: '13% off' },
+            medlife: { inStock: true, price: '₹126', delivery: 'Today', discount: '14% off' },
+            tata1mg: { inStock: true, price: '₹130', delivery: 'Today', discount: '12% off' }
+        }
+    },
+    'vitamin d3': {
+        name: 'Vitamin D3 60K',
+        genericName: 'Cholecalciferol',
+        category: 'Vitamin Supplement',
+        manufacturer: 'Various',
+        availability: {
+            pharmeasy: { inStock: true, price: '₹75', delivery: 'Today', discount: '20% off' },
+            onemg: { inStock: true, price: '₹78', delivery: 'Today', discount: '18% off' },
+            apollo: { inStock: true, price: '₹72', delivery: 'Today', discount: '24% off' },
+            netmeds: { inStock: true, price: '₹76', delivery: 'Today', discount: '19% off' },
+            medlife: { inStock: true, price: '₹77', delivery: 'Today', discount: '18% off' },
+            tata1mg: { inStock: true, price: '₹78', delivery: 'Today', discount: '18% off' }
+        }
+    },
+    'calpol': {
+        name: 'Calpol 500mg',
+        genericName: 'Paracetamol',
+        category: 'Pain Relief / Fever',
+        manufacturer: 'GSK',
+        availability: {
+            pharmeasy: { inStock: true, price: '₹32', delivery: 'Today', discount: '12% off' },
+            onemg: { inStock: true, price: '₹35', delivery: 'Today', discount: '8% off' },
+            apollo: { inStock: true, price: '₹33', delivery: 'Today', discount: '10% off' },
+            netmeds: { inStock: true, price: '₹31', delivery: 'Today', discount: '14% off' },
+            medlife: { inStock: true, price: '₹34', delivery: 'Today', discount: '9% off' },
+            tata1mg: { inStock: true, price: '₹35', delivery: 'Today', discount: '8% off' }
+        }
+    },
+    'levothyroxine': {
+        name: 'Levothyroxine 50mcg',
+        genericName: 'Levothyroxine',
+        category: 'Thyroid',
+        manufacturer: 'Various',
+        availability: {
+            pharmeasy: { inStock: true, price: '₹58', delivery: 'Today', discount: '25% off' },
+            onemg: { inStock: true, price: '₹62', delivery: 'Today', discount: '22% off' },
+            apollo: { inStock: true, price: '₹55', delivery: 'Today', discount: '28% off' },
+            netmeds: { inStock: true, price: '₹60', delivery: 'Today', discount: '23% off' },
+            medlife: { inStock: true, price: '₹59', delivery: 'Tomorrow', discount: '24% off' },
+            tata1mg: { inStock: true, price: '₹62', delivery: 'Today', discount: '22% off' }
         }
     }
 };
+
+// Indian pincodes database (sample cities)
+const PINCODE_INFO = {
+    '110001': { city: 'New Delhi', state: 'Delhi' },
+    '400001': { city: 'Mumbai', state: 'Maharashtra' },
+    '560001': { city: 'Bangalore', state: 'Karnataka' },
+    '600001': { city: 'Chennai', state: 'Tamil Nadu' },
+    '700001': { city: 'Kolkata', state: 'West Bengal' },
+    '500001': { city: 'Hyderabad', state: 'Telangana' },
+    '411001': { city: 'Pune', state: 'Maharashtra' },
+    '380001': { city: 'Ahmedabad', state: 'Gujarat' },
+    '201301': { city: 'Noida', state: 'Uttar Pradesh' },
+    '122001': { city: 'Gurgaon', state: 'Haryana' }
+};
+
+// Function to validate Indian pincode
+function isValidPincode(pincode) {
+    return /^[1-9][0-9]{5}$/.test(pincode);
+}
+
+// Function to get pincode info
+function getPincodeInfo(pincode) {
+    return PINCODE_INFO[pincode] || { city: 'Your area', state: 'India' };
+}
 
 // Function to search medicines
 function searchMedicines(query) {
@@ -201,7 +263,8 @@ function searchMedicines(query) {
     for (const [key, medicine] of Object.entries(MEDICINES_DB)) {
         if (medicine.name.toLowerCase().includes(lowerQuery) ||
             medicine.genericName.toLowerCase().includes(lowerQuery) ||
-            medicine.category.toLowerCase().includes(lowerQuery)) {
+            medicine.category.toLowerCase().includes(lowerQuery) ||
+            medicine.manufacturer.toLowerCase().includes(lowerQuery)) {
             results.push({ key, ...medicine });
         }
     }

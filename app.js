@@ -1,55 +1,155 @@
-// Main application logic
+// Main application logic for MedFinder India
 
 // DOM Elements
-const searchInput = document.getElementById('medicineSearch');
+const pincodeInput = document.getElementById('pincodeInput');
+const pincodeError = document.getElementById('pincodeError');
+const pincodeInfo = document.getElementById('pincodeInfo');
+const pincodeInfoText = document.getElementById('pincodeInfoText');
+const medicineSearch = document.getElementById('medicineSearch');
 const clearBtn = document.getElementById('clearBtn');
+const searchBtn = document.getElementById('searchBtn');
 const suggestionsEl = document.getElementById('suggestions');
 const resultsSection = document.getElementById('resultsSection');
 const emptyState = document.getElementById('emptyState');
 const noResults = document.getElementById('noResults');
 const pharmacyList = document.getElementById('pharmacyList');
-const resultsTitle = document.getElementById('resultsTitle');
 const resultsCount = document.getElementById('resultsCount');
+const resultsMedicine = document.querySelector('.results-medicine');
+const resultsLocationText = document.getElementById('resultsLocationText');
+const tryAgainBtn = document.getElementById('tryAgainBtn');
 
 // State
+let currentPincode = null;
 let currentMedicine = null;
 let searchTimeout = null;
+let isPincodeValid = false;
+let isMedicineValid = false;
 
 // Initialize app
 function init() {
     setupEventListeners();
     showEmptyState();
+    loadSavedPincode();
 }
 
 // Event Listeners
 function setupEventListeners() {
-    // Search input
-    searchInput.addEventListener('input', handleSearchInput);
-    searchInput.addEventListener('keydown', handleKeyDown);
+    // Pincode input
+    pincodeInput.addEventListener('input', handlePincodeInput);
+    pincodeInput.addEventListener('blur', validatePincode);
+
+    // Medicine search input
+    medicineSearch.addEventListener('input', handleMedicineInput);
+    medicineSearch.addEventListener('keydown', handleKeyDown);
 
     // Clear button
     clearBtn.addEventListener('click', clearSearch);
+
+    // Search button
+    searchBtn.addEventListener('click', handleSearchClick);
+
+    // Try again button
+    tryAgainBtn.addEventListener('click', () => {
+        showEmptyState();
+        medicineSearch.focus();
+    });
 
     // Popular search chips
     const chips = document.querySelectorAll('.chip');
     chips.forEach(chip => {
         chip.addEventListener('click', () => {
             const medicine = chip.getAttribute('data-medicine');
-            searchInput.value = medicine;
-            handleSearch(medicine);
+            medicineSearch.value = medicine;
+            handleMedicineInput({ target: medicineSearch });
+
+            // Auto-search if pincode is valid
+            if (isPincodeValid) {
+                setTimeout(() => handleSearchClick(), 300);
+            } else {
+                pincodeInput.focus();
+            }
         });
     });
 
     // Click outside to close suggestions
     document.addEventListener('click', (e) => {
-        if (!suggestionsEl.contains(e.target) && e.target !== searchInput) {
+        if (!suggestionsEl.contains(e.target) && e.target !== medicineSearch) {
             hideSuggestions();
         }
     });
 }
 
-// Handle search input with debouncing
-function handleSearchInput(e) {
+// Load saved pincode from localStorage
+function loadSavedPincode() {
+    const savedPincode = localStorage.getItem('medfinder_pincode');
+    if (savedPincode && isValidPincode(savedPincode)) {
+        pincodeInput.value = savedPincode;
+        validatePincode();
+    }
+}
+
+// Handle pincode input
+function handlePincodeInput(e) {
+    const value = e.target.value;
+
+    // Only allow numbers
+    e.target.value = value.replace(/\D/g, '');
+
+    // Clear previous states
+    pincodeInput.classList.remove('error', 'success');
+    pincodeError.classList.add('hidden');
+    pincodeInfo.classList.add('hidden');
+
+    if (e.target.value.length === 6) {
+        validatePincode();
+    } else {
+        isPincodeValid = false;
+        updateSearchButton();
+    }
+}
+
+// Validate pincode
+function validatePincode() {
+    const pincode = pincodeInput.value.trim();
+
+    if (pincode.length === 0) {
+        isPincodeValid = false;
+        updateSearchButton();
+        return;
+    }
+
+    if (isValidPincode(pincode)) {
+        isPincodeValid = true;
+        currentPincode = pincode;
+
+        // Save to localStorage
+        localStorage.setItem('medfinder_pincode', pincode);
+
+        // Show success state
+        pincodeInput.classList.add('success');
+        pincodeInput.classList.remove('error');
+        pincodeError.classList.add('hidden');
+
+        // Show location info
+        const info = getPincodeInfo(pincode);
+        pincodeInfoText.textContent = `Delivering to ${info.city}, ${info.state}`;
+        pincodeInfo.classList.remove('hidden');
+    } else {
+        isPincodeValid = false;
+        currentPincode = null;
+
+        // Show error state
+        pincodeInput.classList.add('error');
+        pincodeInput.classList.remove('success');
+        pincodeInfo.classList.add('hidden');
+        pincodeError.classList.remove('hidden');
+    }
+
+    updateSearchButton();
+}
+
+// Handle medicine input
+function handleMedicineInput(e) {
     const query = e.target.value.trim();
 
     // Show/hide clear button
@@ -58,7 +158,8 @@ function handleSearchInput(e) {
     } else {
         clearBtn.classList.remove('visible');
         hideSuggestions();
-        showEmptyState();
+        isMedicineValid = false;
+        updateSearchButton();
         return;
     }
 
@@ -67,28 +168,55 @@ function handleSearchInput(e) {
     searchTimeout = setTimeout(() => {
         showSuggestions(query);
     }, 200);
+
+    isMedicineValid = query.length > 0;
+    updateSearchButton();
+}
+
+// Update search button state
+function updateSearchButton() {
+    searchBtn.disabled = !(isPincodeValid && isMedicineValid);
 }
 
 // Handle keyboard navigation
 function handleKeyDown(e) {
     if (e.key === 'Enter') {
         const query = e.target.value.trim();
-        if (query.length > 0) {
+        if (query.length > 0 && isPincodeValid) {
             hideSuggestions();
             handleSearch(query);
+        } else if (!isPincodeValid) {
+            pincodeInput.focus();
         }
     } else if (e.key === 'Escape') {
         hideSuggestions();
     }
 }
 
+// Handle search button click
+function handleSearchClick() {
+    const query = medicineSearch.value.trim();
+
+    if (!isPincodeValid) {
+        pincodeInput.focus();
+        pincodeInput.classList.add('error');
+        return;
+    }
+
+    if (query.length > 0) {
+        hideSuggestions();
+        handleSearch(query);
+    }
+}
+
 // Clear search
 function clearSearch() {
-    searchInput.value = '';
+    medicineSearch.value = '';
     clearBtn.classList.remove('visible');
     hideSuggestions();
-    showEmptyState();
-    searchInput.focus();
+    isMedicineValid = false;
+    updateSearchButton();
+    medicineSearch.focus();
 }
 
 // Show search suggestions
@@ -103,7 +231,7 @@ function showSuggestions(query) {
     suggestionsEl.innerHTML = results.map(medicine => `
         <div class="suggestion-item" data-key="${medicine.key}">
             <strong>${highlightMatch(medicine.name, query)}</strong>
-            <div style="font-size: 0.875rem; color: var(--text-secondary);">
+            <div style="font-size: 0.8125rem; color: var(--text-secondary); margin-top: 0.125rem;">
                 ${medicine.genericName} • ${medicine.category}
             </div>
         </div>
@@ -114,9 +242,16 @@ function showSuggestions(query) {
         item.addEventListener('click', () => {
             const key = item.getAttribute('data-key');
             const medicine = getMedicine(key);
-            searchInput.value = medicine.name;
+            medicineSearch.value = medicine.name;
+            clearBtn.classList.add('visible');
             hideSuggestions();
-            handleSearch(key);
+            isMedicineValid = true;
+            updateSearchButton();
+
+            // Auto-search if pincode is valid
+            if (isPincodeValid) {
+                handleSearch(key);
+            }
         });
     });
 
@@ -131,11 +266,14 @@ function hideSuggestions() {
 // Highlight matching text
 function highlightMatch(text, query) {
     const regex = new RegExp(`(${query})`, 'gi');
-    return text.replace(regex, '<span style="color: var(--primary);">$1</span>');
+    return text.replace(regex, '<span style="background: rgba(16, 132, 126, 0.15);">$1</span>');
 }
 
 // Handle search submission
 function handleSearch(medicineKey) {
+    // Scroll to top for better UX on mobile
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+
     currentMedicine = getMedicine(medicineKey);
 
     if (!currentMedicine) {
@@ -153,6 +291,13 @@ function displayResults(medicine) {
     noResults.classList.add('hidden');
     resultsSection.classList.remove('hidden');
 
+    // Update results header
+    resultsMedicine.textContent = medicine.name;
+
+    // Get location info
+    const locationInfo = getPincodeInfo(currentPincode);
+    resultsLocationText.textContent = `${locationInfo.city}, ${locationInfo.state} - ${currentPincode}`;
+
     // Get available pharmacies
     const availablePharmacies = Object.entries(medicine.availability)
         .filter(([_, data]) => data.inStock)
@@ -161,11 +306,8 @@ function displayResults(medicine) {
     // Update results count
     resultsCount.textContent = availablePharmacies.length;
 
-    // Sort by price (cheapest first, but put GoodRx last)
+    // Sort by price (cheapest first)
     availablePharmacies.sort((a, b) => {
-        if (a.key === 'goodrx') return 1;
-        if (b.key === 'goodrx') return -1;
-
         const priceA = parseFloat(a.price.replace(/[^0-9.]/g, ''));
         const priceB = parseFloat(b.price.replace(/[^0-9.]/g, ''));
         return priceA - priceB;
@@ -175,15 +317,24 @@ function displayResults(medicine) {
     pharmacyList.innerHTML = availablePharmacies.map((pharmacy, index) => `
         <div class="pharmacy-card" data-pharmacy="${pharmacy.key}" data-medicine="${medicine.name}">
             <div class="pharmacy-icon" style="background-color: ${pharmacy.color}20;">
-                <span style="font-size: 1.5rem;">${pharmacy.icon}</span>
+                <span style="font-size: 1.75rem;">${pharmacy.icon}</span>
             </div>
             <div class="pharmacy-info">
                 <div class="pharmacy-name">
                     ${pharmacy.name}
-                    ${index === 0 && pharmacy.key !== 'goodrx' ? '<span class="availability in-stock">Best Price</span>' : ''}
+                    ${index === 0 ? '<span class="availability best-price">Best Price</span>' : ''}
                 </div>
                 <div class="pharmacy-details">
-                    ${pharmacy.price} • ${pharmacy.delivery}
+                    <div>
+                        <span class="pharmacy-price">${pharmacy.price}</span>
+                        ${pharmacy.discount ? `<span class="pharmacy-discount">${pharmacy.discount}</span>` : ''}
+                    </div>
+                    <div style="margin-top: 0.25rem;">
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" style="vertical-align: middle; margin-right: 0.25rem;">
+                            <path d="M13 2L3 14h8l-1 8 10-12h-8l1-8z" stroke="currentColor" stroke-width="2" stroke-linejoin="round"/>
+                        </svg>
+                        ${pharmacy.delivery}
+                    </div>
                 </div>
             </div>
             <div class="pharmacy-arrow">
@@ -202,9 +353,6 @@ function displayResults(medicine) {
             handlePharmacyClick(pharmacyKey, medicineName);
         });
     });
-
-    // Scroll to top
-    window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
 // Handle pharmacy card click with deep linking
@@ -214,11 +362,16 @@ function handlePharmacyClick(pharmacyKey, medicineName) {
     if (!pharmacy) return;
 
     // Try to open the app using deep link
-    const deepLink = pharmacy.getDeepLink(medicineName);
-    const webLink = pharmacy.getWebLink(medicineName);
+    const deepLink = pharmacy.getDeepLink(medicineName, currentPincode);
+    const webLink = pharmacy.getWebLink(medicineName, currentPincode);
+
+    // Track analytics (if you add GA later)
+    console.log(`Opening ${pharmacy.name} for ${medicineName} at ${currentPincode}`);
 
     // Attempt to open deep link
     const startTime = Date.now();
+
+    // Create hidden iframe for deep link attempt
     const iframe = document.createElement('iframe');
     iframe.style.display = 'none';
     iframe.src = deepLink;
@@ -226,18 +379,17 @@ function handlePharmacyClick(pharmacyKey, medicineName) {
 
     // Set timeout to check if app opened
     setTimeout(() => {
+        document.body.removeChild(iframe);
+
         const endTime = Date.now();
         const elapsed = endTime - startTime;
 
         // If app didn't open (user stayed on page), open web fallback
-        if (document.hidden || elapsed > 2000) {
-            // App likely opened, remove iframe
-            document.body.removeChild(iframe);
-        } else {
+        if (!document.hidden && elapsed < 2000) {
             // App didn't open, go to web version
-            document.body.removeChild(iframe);
             window.location.href = webLink;
         }
+        // else: App likely opened, do nothing
     }, 1500);
 
     // For iOS Safari, we need a different approach
@@ -271,7 +423,7 @@ function showNoResults(query) {
     noResults.classList.remove('hidden');
 
     document.getElementById('noResultsText').textContent =
-        `No results found for "${query}". Try a different medicine name.`;
+        `No results found for "${query}". Try searching with a different name.`;
 }
 
 // Service Worker Registration (for PWA)
@@ -279,7 +431,7 @@ if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
             .then(reg => console.log('Service Worker registered'))
-            .catch(err => console.log('Service Worker registration failed'));
+            .catch(err => console.log('Service Worker registration failed:', err));
     });
 }
 
