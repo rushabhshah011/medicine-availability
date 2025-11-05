@@ -15,7 +15,6 @@ const noResults = document.getElementById('noResults');
 const pharmacyList = document.getElementById('pharmacyList');
 const resultsCount = document.getElementById('resultsCount');
 const resultsMedicine = document.querySelector('.results-medicine');
-const resultsLocationText = document.getElementById('resultsLocationText');
 const tryAgainBtn = document.getElementById('tryAgainBtn');
 
 // State
@@ -293,10 +292,6 @@ function displayResults(medicine) {
 
     // Update results header
     resultsMedicine.textContent = medicine.name;
-
-    // Get location info
-    const locationInfo = getPincodeInfo(currentPincode);
-    resultsLocationText.textContent = `${locationInfo.city}, ${locationInfo.state} - ${currentPincode}`;
 
     // Get available pharmacies
     const availablePharmacies = Object.entries(medicine.availability)
