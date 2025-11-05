@@ -1,0 +1,9 @@
+# Python dependencies for MedFinder India
+# Only needed if deploying with Python server (Azure Web Apps, etc.)
+
+# WSGI server for production deployments
+gunicorn==21.2.0
+
+# Optional: For enhanced server capabilities
+# flask==3.0.0  # Uncomment if you want to add Flask routes
+# requests==2.31.0  # Uncomment if you need to call external APIs
