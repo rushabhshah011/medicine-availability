@@ -356,13 +356,44 @@ function handlePharmacyClick(pharmacyKey, medicineName) {
 
     if (!pharmacy) return;
 
+    // Get appropriate link (affiliate or direct)
+    let webLink = pharmacy.getWebLink(medicineName, currentPincode);
+
+    // Check if affiliate link function exists and is configured
+    if (typeof getPharmacyLink !== 'undefined') {
+        const affiliateLink = getPharmacyLink(pharmacyKey, medicineName);
+        if (affiliateLink) {
+            webLink = affiliateLink;
+            console.log(`Using affiliate link for ${pharmacy.name}`);
+
+            // Track affiliate click
+            if (typeof trackAffiliateClick !== 'undefined') {
+                trackAffiliateClick(pharmacyKey, medicineName, 'web_click');
+            }
+        }
+    }
+
     // Try to open the app using deep link
     const deepLink = pharmacy.getDeepLink(medicineName, currentPincode);
-    const webLink = pharmacy.getWebLink(medicineName, currentPincode);
 
-    // Track analytics (if you add GA later)
+    // Track analytics
     console.log(`Opening ${pharmacy.name} for ${medicineName} at ${currentPincode}`);
 
+    // For iOS, use different approach
+    if (isIOS()) {
+        // Try app first
+        window.location.href = deepLink;
+
+        // Fallback to web (with affiliate link)
+        setTimeout(() => {
+            if (!document.hidden) {
+                window.location.href = webLink;
+            }
+        }, 1500);
+        return;
+    }
+
+    // For Android/Desktop
     // Attempt to open deep link
     const startTime = Date.now();
 
@@ -374,29 +405,22 @@ function handlePharmacyClick(pharmacyKey, medicineName) {
 
     // Set timeout to check if app opened
     setTimeout(() => {
-        document.body.removeChild(iframe);
+        try {
+            document.body.removeChild(iframe);
+        } catch (e) {
+            // Iframe may already be removed
+        }
 
         const endTime = Date.now();
         const elapsed = endTime - startTime;
 
         // If app didn't open (user stayed on page), open web fallback
         if (!document.hidden && elapsed < 2000) {
-            // App didn't open, go to web version
+            // App didn't open, go to web version (with affiliate link)
             window.location.href = webLink;
         }
         // else: App likely opened, do nothing
     }, 1500);
-
-    // For iOS Safari, we need a different approach
-    if (isIOS()) {
-        window.location.href = deepLink;
-        setTimeout(() => {
-            // If still on the page after 1.5s, app is not installed
-            if (!document.hidden) {
-                window.location.href = webLink;
-            }
-        }, 1500);
-    }
 }
 
 // Detect iOS
