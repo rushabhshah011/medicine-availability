@@ -1,5 +1,5 @@
 // Affiliate Integration Configuration
-// Sign up at: https://earnkaro.com/pharmeasy or https://www.cuelinks.com/
+// Netmeds affiliate link integrated!
 
 const AFFILIATE_CONFIG = {
     pharmeasy: {
@@ -26,6 +26,30 @@ const AFFILIATE_CONFIG = {
             enabled: true,
             getLink: (medicine) => {
                 return `https://pharmeasy.in/search/all?name=${encodeURIComponent(medicine)}`;
+            }
+        }
+    },
+
+    // Netmeds - FULLY INTEGRATED with your affiliate link!
+    netmeds: {
+        // Your actual affiliate link
+        bitly: {
+            enabled: true, // ✅ ACTIVE!
+            affiliateLink: 'https://bitli.in/9IgyL8s', // Your Bitly link
+            getAffiliateLink: (medicine, pincode) => {
+                // Append search parameters to your affiliate link
+                const baseUrl = 'https://bitli.in/9IgyL8s';
+                // Option 1: Direct to search (Bitly will redirect to Netmeds)
+                // The Bitly link should be configured to redirect to Netmeds with params
+                return `${baseUrl}?search=${encodeURIComponent(medicine)}`;
+            }
+        },
+
+        // Alternative: Direct Netmeds link (if Bitly has issues)
+        direct: {
+            enabled: false, // Use this if Bitly link needs specific format
+            getLink: (medicine) => {
+                return `https://www.netmeds.com/catalogsearch/result/${encodeURIComponent(medicine)}/all`;
             }
         }
     },
@@ -58,7 +82,13 @@ function getPharmacyLink(pharmacyKey, medicine) {
         return null;
     }
 
-    // Try affiliate links first
+    // Special handling for Netmeds (fully integrated)
+    if (pharmacyKey === 'netmeds' && config.bitly && config.bitly.enabled) {
+        console.log('✅ Using Netmeds affiliate link (Bitly)');
+        return config.bitly.getAffiliateLink(medicine);
+    }
+
+    // Try affiliate links first for other pharmacies
     for (const [platform, settings] of Object.entries(config)) {
         if (platform !== 'direct' && settings.enabled && settings.affiliateId !== 'YOUR_' + platform.toUpperCase() + '_ID') {
             console.log(`Using ${platform} affiliate link for ${pharmacyKey}`);
