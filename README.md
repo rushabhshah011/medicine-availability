@@ -13,7 +13,20 @@
 - 💾 **Pincode Memory** - Saves your pincode for future visits
 - ⚡ **Lightning Fast** - Pure vanilla JavaScript, no frameworks, < 50KB total
 - 📦 **PWA Ready** - Install on home screen, works offline
-- 🎨 **Beautiful UI** - Modern gradient design with smooth animations
+- 🎨 **Beautiful UI** - Claude light theme with warm colors
+- 💸 **Affiliate Integration Ready** - Earn ₹120-₹382 per sale (see setup guide)
+
+## 💰 Monetization (NEW!)
+
+This app is ready for **affiliate marketing integration**:
+
+- **PharmEasy Affiliate**: ₹120-₹382 per completed order
+- **1mg Affiliate**: Available via VCommission
+- **Expected Earnings**: ₹5,000-₹10,000/month with decent traffic
+
+👉 **See [AFFILIATE_SETUP.md](AFFILIATE_SETUP.md) for complete setup guide (5 minutes)**
+
+👉 **See [API_INTEGRATION_GUIDE.md](API_INTEGRATION_GUIDE.md) for API options**
 
 ## Supported Indian Pharmacy Apps
 
@@ -98,14 +111,16 @@ Deploy to any static hosting service:
 
 ```
 medicine-availability/
-├── index.html          # Main HTML with pincode & search UI
-├── styles.css          # Mobile-first CSS with gradient design
-├── app.js              # Pincode validation & search logic
-├── data.js             # Indian medicines & pharmacy data
-├── manifest.json       # PWA manifest
-├── sw.js               # Service Worker for offline support
-├── .gitignore          # Git ignore file
-└── README.md           # This file
+├── index.html                  # Main HTML with pincode & search UI
+├── styles.css                  # Claude light theme CSS
+├── app.js                      # Search logic with affiliate support
+├── data.js                     # Indian medicines & pharmacy data
+├── affiliate-config.js         # Affiliate program configuration
+├── manifest.json               # PWA manifest
+├── sw.js                       # Service Worker for offline
+├── AFFILIATE_SETUP.md          # Quick setup guide for earning
+├── API_INTEGRATION_GUIDE.md    # API options and alternatives
+└── README.md                   # This file
 ```
 
 ## Technology Stack

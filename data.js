@@ -7,6 +7,9 @@ const PHARMACY_APPS = {
         color: '#10847E',
         appScheme: 'pharmeasy://',
         webUrl: 'https://pharmeasy.in',
+        // Affiliate: Sign up at https://earnkaro.com/pharmeasy (₹120/sale)
+        hasAffiliate: true,
+        affiliateNote: 'EarnKaro, Cuelinks, INRDeals available',
         getDeepLink: (medicine, pincode) => `pharmeasy://medicines/search?name=${encodeURIComponent(medicine)}&pincode=${pincode}`,
         getWebLink: (medicine, pincode) => `https://pharmeasy.in/search/all?name=${encodeURIComponent(medicine)}`
     },
@@ -16,6 +19,9 @@ const PHARMACY_APPS = {
         color: '#FF6F61',
         appScheme: 'onemg://',
         webUrl: 'https://www.1mg.com',
+        // Affiliate: VCommission available
+        hasAffiliate: true,
+        affiliateNote: 'VCommission program available',
         getDeepLink: (medicine, pincode) => `onemg://search?q=${encodeURIComponent(medicine)}&pincode=${pincode}`,
         getWebLink: (medicine, pincode) => `https://www.1mg.com/search/all?name=${encodeURIComponent(medicine)}`
     },
